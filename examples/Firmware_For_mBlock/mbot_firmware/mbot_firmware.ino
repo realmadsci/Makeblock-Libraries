@@ -197,10 +197,12 @@ void readButtonInner(uint8_t pin, int8_t s)
     return;
   }
   buttonPressed = currentPressed;
+/* DON'T SEND UNSOLICITED MESSAGES EVER EVER EVER EVER!!!
   writeHead();
   writeSerial(0x80);
   sendByte(currentPressed);
   writeEnd();
+*/
 }
 
 void buzzerOn(){
