@@ -21,7 +21,7 @@ Me7SegmentDisplay seg;
 MePort generalDevice;
 MeLEDMatrix ledMx;
 MeBuzzer buzzer;
-MeIR ir;
+//MeIR ir;
 MeGyro gyro;
 MeJoystick joystick;
 MeCompass Compass;
@@ -458,7 +458,7 @@ void runModule(int device){
      for(int i=0;i<len;i++){
        Str_data+=(char)readBuffer(6+i);
      }
-     ir.sendString(Str_data);
+     //ir.sendString(Str_data);
      Str_data = "";
    }
    break;
@@ -490,9 +490,20 @@ void runModule(int device){
      int hz = readShort(6);
      int tone_time = readShort(8);
      if(hz>0){
-       buzzer.tone(hz,tone_time);
+        pinMode(8, OUTPUT);
+        if (tone_time) {
+          tone(8, hz, tone_time);
+          delay(tone_time);
+        } else {
+          tone(8, hz);
+        }
+        
+//       buzzer.tone(hz,tone_time);
      }else{
-       buzzer.noTone(); 
+       noTone(8);
+      pinMode(8, OUTPUT);
+      digitalWrite(8, LOW);
+//       buzzer.noTone(); 
      }
    }
    break;
@@ -744,7 +755,7 @@ void setup(){
   buzzer.tone(500,50); 
   delay(50);
   buzzerOff();
-  ir.begin();
+  //ir.begin();
   led.setpin(13);
   led.setColor(0,0,0);
   led.show();
@@ -759,7 +770,7 @@ void loop(){
   readButtonInner(7,0);
   keyPressed = buttonSensor.pressed();
   currentTime = millis()/1000.0-lastTime;
-  if(ir.decode())
+/*  if(ir.decode())
   {
     irRead = ((ir.value>>8)>>8)&0xff;
     lastIRTime = millis()/1000.0;
@@ -783,7 +794,7 @@ void loop(){
       irDelay = 0;
      }
    }
-  }
+  }*/
   readSerial();
   if(isAvailable){
     unsigned char c = serialRead&0xff;
